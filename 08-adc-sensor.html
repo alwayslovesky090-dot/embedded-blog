@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADC 与传感器采集 - 嵌入式从入门到精通</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="../../index.html">嵌入式<span>博客</span></a>
+    </div>
+  </header>
+
+  <article class="article-layout">
+    <a class="back-home" href="../../index.html">← 返回目录</a>
+    <div class="article-meta">
+      <span class="stage-badge intermediate">进阶阶段</span>
+      <span>第 08 篇</span>
+    </div>
+    <h1>ADC 与传感器采集</h1>
+
+    <p>真实世界的温度、光照、电压是模拟量，MCU 通过 ADC（模数转换器）将其变为数字值。</p>
+
+    <h2>ADC 关键参数</h2>
+    <ul>
+      <li><strong>分辨率</strong>：常见 12 位，即 0～4095。</li>
+      <li><strong>参考电压 Vref</strong>：如 3.3V，则 LSB ≈ 3.3/4096 V。</li>
+      <li><strong>采样时间</strong>：高阻抗信号源需更长采样时间。</li>
+    </ul>
+
+    <h2>电压换算</h2>
+    <pre><code>uint16_t raw = HAL_ADC_GetValue(&amp;hadc1);
+float voltage = raw * 3.3f / 4095.0f;</code></pre>
+
+    <h2>数字传感器 vs 模拟传感器</h2>
+    <ul>
+      <li><strong>数字</strong>：DHT11、BME280 等通过 I2C/UART 输出已处理数据，开发快。</li>
+      <li><strong>模拟</strong>：LM35 等输出电压，需 ADC + 标定，成本低。</li>
+    </ul>
+
+    <h2>简单滤波</h2>
+    <p>单次采样易受噪声影响，常用滑动平均或中值滤波：</p>
+    <pre><code>uint16_t moving_average(uint16_t new_sample) {
+    static uint16_t buf[8];
+    static uint8_t idx = 0;
+    buf[idx++ &amp; 7] = new_sample;
+    uint32_t sum = 0;
+    for (int i = 0; i &lt; 8; i++) sum += buf[i];
+    return (uint16_t)(sum / 8);
+}</code></pre>
+
+    <nav class="article-nav">
+      <a class="prev" href="07-serial-bus.html">← 上一篇：UART / SPI / I2C</a>
+      <a class="next" href="09-rtos-intro.html">下一篇：RTOS 入门 →</a>
+    </nav>
+  </article>
+
+  <footer class="site-footer">嵌入式从入门到精通</footer>
+</body>
+</html>

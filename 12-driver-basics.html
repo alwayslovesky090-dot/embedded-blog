@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>驱动开发基础 - 嵌入式从入门到精通</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="../../index.html">嵌入式<span>博客</span></a>
+    </div>
+  </header>
+
+  <article class="article-layout">
+    <a class="back-home" href="../../index.html">← 返回目录</a>
+    <div class="article-meta">
+      <span class="stage-badge advanced">精通阶段</span>
+      <span>第 12 篇</span>
+    </div>
+    <h1>驱动开发基础</h1>
+
+    <p>Linux 驱动是应用与硬件之间的桥梁。入门从<strong>字符设备驱动</strong>开始最合适。</p>
+
+    <h2>驱动类型</h2>
+    <ul>
+      <li><strong>字符设备</strong>：按字节流访问，如 GPIO、UART。</li>
+      <li><strong>块设备</strong>：按块访问，如 eMMC、SD 卡。</li>
+      <li><strong>网络设备</strong>：以太网、Wi-Fi 网卡。</li>
+    </ul>
+
+    <h2>字符设备框架</h2>
+    <pre><code>static struct file_operations fops = {
+    .owner = THIS_MODULE,
+    .open  = my_open,
+    .read  = my_read,
+    .write = my_write,
+    .release = my_release,
+};
+
+static int __init my_init(void) {
+    alloc_chrdev_region(&amp;devno, 0, 1, "mydev");
+    cdev_init(&amp;my_cdev, &amp;fops);
+    cdev_add(&amp;my_cdev, devno, 1);
+    return 0;
+}</code></pre>
+
+    <h2>Platform 驱动与设备树</h2>
+    <p>现代 ARM 平台通过设备树描述硬件，驱动用 <code>of_match_table</code> 与节点匹配：</p>
+    <pre><code>// 设备树片段
+myled {
+    compatible = "vendor,my-led";
+    gpios = &lt;&amp;gpio 18 GPIO_ACTIVE_HIGH&gt;;
+};</code></pre>
+
+    <h2>用户态访问</h2>
+    <p>应用通过 <code>/dev/mydev</code> 或 sysfs（<code>/sys/class/...</code>）与驱动交互，避免直接操作寄存器。</p>
+
+    <nav class="article-nav">
+      <a class="prev" href="11-embedded-linux.html">← 上一篇：嵌入式 Linux 入门</a>
+      <a class="next" href="13-performance.html">下一篇：性能优化与调试 →</a>
+    </nav>
+  </article>
+
+  <footer class="site-footer">嵌入式从入门到精通</footer>
+</body>
+</html>

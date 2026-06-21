@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>项目实战：完整产品设计 - 嵌入式从入门到精通</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="../../index.html">嵌入式<span>博客</span></a>
+    </div>
+  </header>
+
+  <article class="article-layout">
+    <a class="back-home" href="../../index.html">← 返回目录</a>
+    <div class="article-meta">
+      <span class="stage-badge advanced">精通阶段</span>
+      <span>第 15 篇</span>
+    </div>
+    <h1>项目实战：完整产品设计</h1>
+
+    <p>从「会写驱动」到「做出产品」，还需要工程化思维。以下是一个物联网采集节点的设计范例。</p>
+
+    <h2>1. 需求分析</h2>
+    <ul>
+      <li>采集温湿度，每 5 分钟上报云端。</li>
+      <li>电池供电，目标续航 1 年。</li>
+      <li>支持 OTA，现场可维护。</li>
+    </ul>
+
+    <h2>2. 架构拆分</h2>
+    <pre><code>┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│  Sensor     │────▶│  App Logic  │────▶│  Cloud API  │
+│  Driver     │     │  (RTOS)     │     │  (MQTT)     │
+└─────────────┘     └─────────────┘     └─────────────┘
+       │                    │                    │
+       └────────────────────┴────────────────────┘
+                    Power Manager + WDT</code></pre>
+
+    <h2>3. 模块划分</h2>
+    <ul>
+      <li><strong>BSP</strong>：板级支持，引脚、时钟、外设初始化。</li>
+      <li><strong>Middleware</strong>：协议栈、文件系统、OTA。</li>
+      <li><strong>Application</strong>：业务状态机，不直接操作寄存器。</li>
+    </ul>
+
+    <h2>4. 测试与量产</h2>
+    <ol>
+      <li>单元测试：驱动与算法模块。</li>
+      <li>集成测试：长时间跑机、高低温。</li>
+      <li>产测：ICT、烧录、射频校准、整机功能检。</li>
+      <li>文档：BOM、原理图、软件版本说明、维护手册。</li>
+    </ol>
+
+    <h2>5. 持续学习</h2>
+    <p>嵌入式领域宽广：无线（BLE/LoRa/5G）、视觉、功能安全（ISO 26262）、RISC-V 等。保持阅读 datasheet、参考设计，并在真实项目中迭代。</p>
+
+    <div class="note">
+      <strong>恭喜读完本系列！</strong>从第一篇的概念介绍到这里，你已建立从入门到产品化的完整知识地图。接下来选一块板子、做一个完整小项目，是最好的巩固方式。
+    </div>
+
+    <nav class="article-nav">
+      <a class="prev" href="14-reliability.html">← 上一篇：可靠性与看门狗</a>
+      <a class="next" href="../../index.html">返回目录 →</a>
+    </nav>
+  </article>
+
+  <footer class="site-footer">嵌入式从入门到精通</footer>
+</body>
+</html>

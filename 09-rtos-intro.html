@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RTOS 入门 - 嵌入式从入门到精通</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="../../index.html">嵌入式<span>博客</span></a>
+    </div>
+  </header>
+
+  <article class="article-layout">
+    <a class="back-home" href="../../index.html">← 返回目录</a>
+    <div class="article-meta">
+      <span class="stage-badge intermediate">进阶阶段</span>
+      <span>第 09 篇</span>
+    </div>
+    <h1>RTOS 入门</h1>
+
+    <p>当项目同时要做通信、采集、UI、控制时，单线程 <code>while(1)</code> 难以维护。RTOS（实时操作系统）通过多任务调度解决并发问题。</p>
+
+    <h2>核心概念</h2>
+    <ul>
+      <li><strong>任务（Task）</strong>：独立线程，各自有栈空间。</li>
+      <li><strong>调度器</strong>：按优先级或时间片切换任务。</li>
+      <li><strong>队列（Queue）</strong>：任务间安全传递数据。</li>
+      <li><strong>信号量 / 互斥量</strong>：同步与保护共享资源。</li>
+    </ul>
+
+    <h2>FreeRTOS 最小示例</h2>
+    <pre><code>void led_task(void *arg) {
+    while (1) {
+        led_toggle();
+        vTaskDelay(pdMS_TO_TICKS(500));
+    }
+}
+
+int main(void) {
+    // 硬件初始化 ...
+    xTaskCreate(led_task, "LED", 128, NULL, 1, NULL);
+    vTaskStartScheduler();
+    while (1);
+}</code></pre>
+
+    <h2>何时需要 RTOS</h2>
+    <ul>
+      <li>多个逻辑并行、有阻塞等待（等网络、等传感器）。</li>
+      <li>需要严格优先级（控制环高于日志任务）。</li>
+    </ul>
+    <p>简单单功能项目可继续裸机；复杂度上升再引入 RTOS，避免过早抽象。</p>
+
+    <nav class="article-nav">
+      <a class="prev" href="08-adc-sensor.html">← 上一篇：ADC 与传感器采集</a>
+      <a class="next" href="10-low-power.html">下一篇：低功耗设计基础 →</a>
+    </nav>
+  </article>
+
+  <footer class="site-footer">嵌入式从入门到精通</footer>
+</body>
+</html>

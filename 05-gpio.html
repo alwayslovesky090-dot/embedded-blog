@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GPIO 与基本外设 - 嵌入式从入门到精通</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="../../index.html">嵌入式<span>博客</span></a>
+    </div>
+  </header>
+
+  <article class="article-layout">
+    <a class="back-home" href="../../index.html">← 返回目录</a>
+    <div class="article-meta">
+      <span class="stage-badge beginner">入门阶段</span>
+      <span>第 05 篇</span>
+    </div>
+    <h1>GPIO 与基本外设</h1>
+
+    <p>GPIO（General Purpose Input/Output）是最常用的外设，用于读按键、控 LED、片选传感器等。</p>
+
+    <h2>输出模式</h2>
+    <ul>
+      <li><strong>推挽输出（PP）</strong>：可主动输出高/低，驱动 LED、继电器等。</li>
+      <li><strong>开漏输出（OD）</strong>：只能拉低或浮空，常配合上拉用于 I2C 等总线。</li>
+    </ul>
+
+    <h2>输入模式</h2>
+    <ul>
+      <li><strong>浮空输入</strong>：电平由外部电路决定，需外部上下拉。</li>
+      <li><strong>上拉 / 下拉输入</strong>：无外部信号时有默认电平，适合按键检测。</li>
+    </ul>
+
+    <h2>按键检测与消抖</h2>
+    <p>机械按键按下时触点会抖动，需软件消抖：</p>
+    <pre><code>uint8_t read_key_stable(void) {
+    if (HAL_GPIO_ReadPin(KEY_GPIO, KEY_PIN) == GPIO_PIN_RESET) {
+        HAL_Delay(20);  // 消抖延时
+        if (HAL_GPIO_ReadPin(KEY_GPIO, KEY_PIN) == GPIO_PIN_RESET)
+            return 1;
+    }
+    return 0;
+}</code></pre>
+
+    <h2>简单驱动分层</h2>
+    <p>良好习惯是将硬件细节封装成模块 API：</p>
+    <pre><code>void led_on(void);
+void led_off(void);
+void led_toggle(void);
+uint8_t key_pressed(void);</code></pre>
+    <p>应用层只调用 <code>led_on()</code>，换板子时只需改底层实现。</p>
+
+    <div class="note">
+      <strong>入门阶段小结：</strong>掌握 GPIO 后，你已能完成 LED、按键、蜂鸣器等基础交互。下一阶段将学习中断、定时器与串行通信。
+    </div>
+
+    <nav class="article-nav">
+      <a class="prev" href="04-first-led.html">← 上一篇：第一个程序：点亮 LED</a>
+      <a class="next" href="../intermediate/06-interrupt-timer.html">下一篇：中断与定时器 →</a>
+    </nav>
+  </article>
+
+  <footer class="site-footer">嵌入式从入门到精通</footer>
+</body>
+</html>

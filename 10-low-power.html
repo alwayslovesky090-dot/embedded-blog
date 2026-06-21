@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>低功耗设计基础 - 嵌入式从入门到精通</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="../../index.html">嵌入式<span>博客</span></a>
+    </div>
+  </header>
+
+  <article class="article-layout">
+    <a class="back-home" href="../../index.html">← 返回目录</a>
+    <div class="article-meta">
+      <span class="stage-badge intermediate">进阶阶段</span>
+      <span>第 10 篇</span>
+    </div>
+    <h1>低功耗设计基础</h1>
+
+    <p>手环、烟感、农业节点等电池供电设备，功耗直接决定续航。低功耗是嵌入式进阶的必修课。</p>
+
+    <h2>功耗来源</h2>
+    <ul>
+      <li>CPU 运行与时钟频率。</li>
+      <li>外设模块（ADC、无线射频等）。</li>
+      <li>GPIO 灌/拉电流（驱动 LED 很耗电）。</li>
+      <li>漏电流（未使用引脚应配置为确定电平）。</li>
+    </ul>
+
+    <h2>睡眠模式（以 STM32 为例）</h2>
+    <ul>
+      <li><strong>Sleep</strong>：CPU 停，外设继续，任意中断可唤醒。</li>
+      <li><strong>Stop</strong>：大部分时钟停，RAM 保持，μA 级电流。</li>
+      <li><strong>Standby</strong>：最低功耗，唤醒后相当于复位。</li>
+    </ul>
+
+    <h2>设计策略</h2>
+    <ol>
+      <li>能睡就睡：空闲时进入 Stop，定时或中断唤醒。</li>
+      <li>降低主频：非峰值算力需求时降频运行。</li>
+      <li>批量上报：传感器数据本地缓存，间隔上传。</li>
+      <li>关闭不用外设时钟：每个模块都有功耗代价。</li>
+    </ol>
+
+    <div class="note">
+      <strong>进阶阶段小结：</strong>你已掌握中断、通信、采集、RTOS 与低功耗。下一阶段进入 Linux、驱动与系统级设计。
+    </div>
+
+    <nav class="article-nav">
+      <a class="prev" href="09-rtos-intro.html">← 上一篇：RTOS 入门</a>
+      <a class="next" href="../advanced/11-embedded-linux.html">下一篇：嵌入式 Linux 入门 →</a>
+    </nav>
+  </article>
+
+  <footer class="site-footer">嵌入式从入门到精通</footer>
+</body>
+</html>

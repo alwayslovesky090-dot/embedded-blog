@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>性能优化与调试 - 嵌入式从入门到精通</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="../../index.html">嵌入式<span>博客</span></a>
+    </div>
+  </header>
+
+  <article class="article-layout">
+    <a class="back-home" href="../../index.html">← 返回目录</a>
+    <div class="article-meta">
+      <span class="stage-badge advanced">精通阶段</span>
+      <span>第 13 篇</span>
+    </div>
+    <h1>性能优化与调试</h1>
+
+    <p>产品级嵌入式不仅要「能跑」，还要在有限资源下<strong>稳定、高效</strong>。优化前先测量，避免盲目改代码。</p>
+
+    <h2>常见瓶颈</h2>
+    <ul>
+      <li>CPU 占用过高：算法复杂度、频繁中断、轮询等待。</li>
+      <li>内存不足：栈溢出、内存泄漏、碎片（若用堆）。</li>
+      <li>I/O 阻塞：同步读写 Flash、无 DMA 的 SPI 传输。</li>
+    </ul>
+
+    <h2>DMA（直接内存访问）</h2>
+    <p>外设与 RAM 之间传数据不经过 CPU 逐字节搬运，适合大批量 ADC、音频、显示缓冲传输，显著降低 CPU 负载。</p>
+
+    <h2>Cache 与一致性</h2>
+    <p>带 Cache 的 MPU 上，DMA 缓冲区需考虑 Cache 行对齐与 invalidate/clean，否则可能读到脏数据。</p>
+
+    <h2>调试工具</h2>
+    <ul>
+      <li><strong>逻辑分析仪 / 示波器</strong>：总线时序、中断间隔。</li>
+      <li><strong>SWO / ITM</strong>：低开销跟踪打印。</li>
+      <li><strong>gprof / perf</strong>（Linux）：热点函数分析。</li>
+      <li><strong>HardFault 分析</strong>：查看 LR/PC 栈回溯定位崩溃点。</li>
+    </ul>
+
+    <div class="note">
+      <strong>原则：</strong>先 profile 再优化；优先改算法与架构，最后再抠微优化。
+    </div>
+
+    <nav class="article-nav">
+      <a class="prev" href="12-driver-basics.html">← 上一篇：驱动开发基础</a>
+      <a class="next" href="14-reliability.html">下一篇：可靠性与看门狗 →</a>
+    </nav>
+  </article>
+
+  <footer class="site-footer">嵌入式从入门到精通</footer>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>第一个程序：点亮 LED - 嵌入式从入门到精通</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="../../index.html">嵌入式<span>博客</span></a>
+    </div>
+  </header>
+
+  <article class="article-layout">
+    <a class="back-home" href="../../index.html">← 返回目录</a>
+    <div class="article-meta">
+      <span class="stage-badge beginner">入门阶段</span>
+      <span>第 04 篇</span>
+    </div>
+    <h1>第一个程序：点亮 LED</h1>
+
+    <p>点亮 LED 是嵌入式领域的「Hello World」。它验证了：编译 → 下载 → 硬件控制 整条链路。</p>
+
+    <h2>硬件连接</h2>
+    <p>LED 长脚接 GPIO（通过限流电阻，通常 220Ω～1kΩ），短脚接 GND。若 LED 接 VCC，则 GPIO 输出低电平时点亮（灌电流方式）。</p>
+
+    <h2>步骤概览</h2>
+    <ol>
+      <li>使能 GPIO 端口时钟（STM32 外设默认时钟关闭以省电）。</li>
+      <li>配置引脚为推挽输出模式。</li>
+      <li>设置输出高或低电平，使 LED 亮或灭。</li>
+    </ol>
+
+    <h2>寄存器方式（概念示例）</h2>
+    <pre><code>// 1. 开启 GPIOA 时钟
+RCC_APB2ENR |= (1 &lt;&lt; 2);
+
+// 2. 配置 PA5 为推挽输出 50MHz（具体位域见手册 CRL 寄存器）
+GPIOA_CRL = (GPIOA_CRL &amp; ~(0xF &lt;&lt; 20)) | (0x3 &lt;&lt; 20);
+
+// 3. 置位 PA5，LED 亮
+GPIOA_BSRR = (1 &lt;&lt; 5);</code></pre>
+
+    <h2>HAL 库方式（STM32）</h2>
+    <pre><code>int main(void) {
+    HAL_Init();
+    SystemClock_Config();
+
+    __HAL_RCC_GPIOA_CLK_ENABLE();
+    GPIO_InitTypeDef gpio = {0};
+    gpio.Pin = GPIO_PIN_5;
+    gpio.Mode = GPIO_MODE_OUTPUT_PP;
+    gpio.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(GPIOA, &amp;gpio);
+
+    while (1) {
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
+        HAL_Delay(500);
+        HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
+        HAL_Delay(500);
+    }
+}</code></pre>
+
+    <h2>常见问题</h2>
+    <ul>
+      <li>LED 不亮：检查引脚号、电阻、共阳/共阴接法。</li>
+      <li>程序跑飞：检查时钟配置、是否启用 HardFault 调试。</li>
+    </ul>
+
+    <nav class="article-nav">
+      <a class="prev" href="03-c-basics.html">← 上一篇：C 语言嵌入式要点</a>
+      <a class="next" href="05-gpio.html">下一篇：GPIO 与基本外设 →</a>
+    </nav>
+  </article>
+
+  <footer class="site-footer">嵌入式从入门到精通</footer>
+</body>
+</html>

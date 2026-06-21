@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UART / SPI / I2C 通信 - 嵌入式从入门到精通</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="../../index.html">嵌入式<span>博客</span></a>
+    </div>
+  </header>
+
+  <article class="article-layout">
+    <a class="back-home" href="../../index.html">← 返回目录</a>
+    <div class="article-meta">
+      <span class="stage-badge intermediate">进阶阶段</span>
+      <span>第 07 篇</span>
+    </div>
+    <h1>UART / SPI / I2C 通信</h1>
+
+    <p>MCU 与传感器、模块、PC 通信依赖串行总线。三种协议各有适用场景。</p>
+
+    <h2>UART（异步串口）</h2>
+    <ul>
+      <li><strong>线数</strong>：TX、RX、GND（可选 RTS/CTS 流控）。</li>
+      <li><strong>特点</strong>：点对点、全双工、实现简单。</li>
+      <li><strong>用途</strong>：调试打印、GPS、蓝牙模块 AT 指令、Modbus RTU。</li>
+    </ul>
+    <pre><code>HAL_UART_Transmit(&amp;huart1, (uint8_t *)"Hello\r\n", 7, 100);</code></pre>
+
+    <h2>SPI（同步串行）</h2>
+    <ul>
+      <li><strong>线数</strong>：SCK、MOSI、MISO、CS，可多从机（各 CS 独立）。</li>
+      <li><strong>特点</strong>：速度快、全双工、主机控制时钟。</li>
+      <li><strong>用途</strong>：Flash、SD 卡、高速 ADC、显示屏。</li>
+    </ul>
+
+    <h2>I2C（两线制总线）</h2>
+    <ul>
+      <li><strong>线数</strong>：SCL、SDA，多设备共享，地址区分。</li>
+      <li><strong>特点</strong>：线少、可挂多设备；速度较 SPI 低。</li>
+      <li><strong>用途</strong>：EEPROM、温湿度传感器、OLED（部分）。</li>
+    </ul>
+
+    <h2>选型对比</h2>
+    <ul>
+      <li>要调试日志 → UART。</li>
+      <li>要大带宽外设 → SPI。</li>
+      <li>引脚紧张、多传感器 → I2C。</li>
+    </ul>
+
+    <nav class="article-nav">
+      <a class="prev" href="06-interrupt-timer.html">← 上一篇：中断与定时器</a>
+      <a class="next" href="08-adc-sensor.html">下一篇：ADC 与传感器采集 →</a>
+    </nav>
+  </article>
+
+  <footer class="site-footer">嵌入式从入门到精通</footer>
+</body>
+</html>

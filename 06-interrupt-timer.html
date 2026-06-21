@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中断与定时器 - 嵌入式从入门到精通</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="../../index.html">嵌入式<span>博客</span></a>
+    </div>
+  </header>
+
+  <article class="article-layout">
+    <a class="back-home" href="../../index.html">← 返回目录</a>
+    <div class="article-meta">
+      <span class="stage-badge intermediate">进阶阶段</span>
+      <span>第 06 篇</span>
+    </div>
+    <h1>中断与定时器</h1>
+
+    <p>轮询（不断查询 GPIO）浪费 CPU。中断（Interrupt）让外设事件触发 CPU 跳转执行 ISR，定时器则提供精确的时间基准。</p>
+
+    <h2>中断基本概念</h2>
+    <ul>
+      <li><strong>中断源</strong>：按键、串口收到数据、定时器溢出等。</li>
+      <li><strong>ISR</strong>：Interrupt Service Routine，中断服务函数，应尽量短小。</li>
+      <li><strong>NVIC</strong>：嵌套向量中断控制器，管理优先级与嵌套。</li>
+    </ul>
+
+    <h2>优先级</h2>
+    <p>高优先级中断可打断低优先级。合理设置优先级可避免串口丢数据或控制环路抖动。</p>
+
+    <h2>定时器用途</h2>
+    <ol>
+      <li>周期性任务（如每 1ms 扫描按键）。</li>
+      <li>PWM 输出（电机、LED 调光）。</li>
+      <li>输入捕获（测量脉冲宽度、频率）。</li>
+      <li>软件延时替代 <code>HAL_Delay</code> 阻塞。</li>
+    </ol>
+
+    <h2>定时器中断示例思路</h2>
+    <pre><code>// TIM2 每 1ms 中断一次
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+    if (htim->Instance == TIM2) {
+        tick_ms++;
+        if (tick_ms >= 1000) {
+            tick_ms = 0;
+            flag_1s = 1;  // 主循环处理耗时逻辑
+        }
+    }
+}</code></pre>
+
+    <div class="note">
+      <strong>注意：</strong>ISR 中不要调用 <code>HAL_Delay</code>、<code>printf</code>（若阻塞）等耗时操作；复杂逻辑用标志位通知主循环处理。
+    </div>
+
+    <nav class="article-nav">
+      <a class="prev" href="../beginner/05-gpio.html">← 上一篇：GPIO 与基本外设</a>
+      <a class="next" href="07-serial-bus.html">下一篇：UART / SPI / I2C →</a>
+    </nav>
+  </article>
+
+  <footer class="site-footer">嵌入式从入门到精通</footer>
+</body>
+</html>

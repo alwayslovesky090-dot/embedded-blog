@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>什么是嵌入式系统 - 嵌入式从入门到精通</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="../../index.html">嵌入式<span>博客</span></a>
+    </div>
+  </header>
+
+  <article class="article-layout">
+    <a class="back-home" href="../../index.html">← 返回目录</a>
+    <div class="article-meta">
+      <span class="stage-badge beginner">入门阶段</span>
+      <span>第 01 篇</span>
+    </div>
+    <h1>什么是嵌入式系统</h1>
+
+    <p>嵌入式系统（Embedded System）是指<strong>嵌入到专用设备内部</strong>、为完成特定功能而设计的计算机系统。它通常由微控制器（MCU）或微处理器（MPU）、存储器、外设接口和软件组成，对用户往往是「看不见」的——你按下的电梯按钮、手环上的步数、汽车里的 ABS，背后都是嵌入式系统在运行。</p>
+
+    <h2>与通用计算机的区别</h2>
+    <ul>
+      <li><strong>专用性</strong>：只做一件事或一类事，不像 PC 可以装各种软件。</li>
+      <li><strong>资源受限</strong>：内存可能只有几 KB 到几 MB，CPU 主频也远低于桌面处理器。</li>
+      <li><strong>实时性</strong>：很多场景要求在确定时间内响应（如电机控制、工业采集）。</li>
+      <li><strong>高可靠</strong>：设备可能 7×24 小时运行，不能随意崩溃重启。</li>
+    </ul>
+
+    <h2>典型硬件组成</h2>
+    <ol>
+      <li><strong>主控芯片</strong>：如 STM32、ESP32、Nordic nRF 等 MCU。</li>
+      <li><strong>存储</strong>：Flash 存程序，RAM 存运行时数据。</li>
+      <li><strong>外设</strong>：GPIO、UART、SPI、I2C、ADC、定时器等。</li>
+      <li><strong>电源与时钟</strong>：晶振、LDO/DC-DC、电池管理。</li>
+    </ol>
+
+    <h2>常见应用领域</h2>
+    <p>消费电子（手环、耳机）、智能家居、工业控制、汽车电子、医疗设备、物联网节点等，几乎无处不在。</p>
+
+    <div class="note">
+      <strong>学习建议：</strong>先选一块主流开发板（如 STM32F103 或 ESP32），从点亮 LED 开始，再逐步学习外设与通信协议。
+    </div>
+
+    <nav class="article-nav">
+      <span></span>
+      <a class="next" href="02-dev-environment.html">下一篇：开发环境搭建 →</a>
+    </nav>
+  </article>
+
+  <footer class="site-footer">嵌入式从入门到精通</footer>
+</body>
+</html>

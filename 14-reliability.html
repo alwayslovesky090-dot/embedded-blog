@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>可靠性与看门狗 - 嵌入式从入门到精通</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="../../index.html">嵌入式<span>博客</span></a>
+    </div>
+  </header>
+
+  <article class="article-layout">
+    <a class="back-home" href="../../index.html">← 返回目录</a>
+    <div class="article-meta">
+      <span class="stage-badge advanced">精通阶段</span>
+      <span>第 14 篇</span>
+    </div>
+    <h1>可靠性与看门狗</h1>
+
+    <p>工业、医疗、车载等场景要求设备长期稳定运行。软件难免会死锁或跑飞，硬件与软件机制共同保障可靠性。</p>
+
+    <h2>看门狗（Watchdog）</h2>
+    <p>独立定时器，必须在超时前「喂狗」，否则复位 MCU。主循环或最高优先级任务定期喂狗；若某任务卡死导致无法喂狗，系统自动重启。</p>
+    <pre><code>// 主循环或监控任务
+while (1) {
+    if (system_healthy()) {
+        HAL_IWDG_Refresh(&amp;hiwdg);
+    }
+    osDelay(500);
+}</code></pre>
+
+    <h2>异常处理</h2>
+    <ul>
+      <li>实现 <code>HardFault_Handler</code>，保存上下文、写日志、安全复位。</li>
+      <li>断言与错误码：生产环境关闭 assert，改用可恢复的错误处理。</li>
+      <li>双备份配置：Flash 中关键参数 A/B 区切换。</li>
+    </ul>
+
+    <h2>OTA 远程升级</h2>
+    <ol>
+      <li>下载固件到备份分区，校验 CRC / 签名。</li>
+      <li>切换 Boot 标志，重启进入新固件。</li>
+      <li>失败则回滚到旧版本（A/B 分区方案）。</li>
+    </ol>
+
+    <h2>现场稳定性</h2>
+    <p>EMC 抗干扰、电源纹波、温湿度范围、长期老化测试，都是产品化不可或缺的一环。</p>
+
+    <nav class="article-nav">
+      <a class="prev" href="13-performance.html">← 上一篇：性能优化与调试</a>
+      <a class="next" href="15-product-design.html">下一篇：项目实战：完整产品设计 →</a>
+    </nav>
+  </article>
+
+  <footer class="site-footer">嵌入式从入门到精通</footer>
+</body>
+</html>

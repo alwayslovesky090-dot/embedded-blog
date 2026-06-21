@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>C 语言嵌入式要点 - 嵌入式从入门到精通</title>
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="logo" href="../../index.html">嵌入式<span>博客</span></a>
+    </div>
+  </header>
+
+  <article class="article-layout">
+    <a class="back-home" href="../../index.html">← 返回目录</a>
+    <div class="article-meta">
+      <span class="stage-badge beginner">入门阶段</span>
+      <span>第 03 篇</span>
+    </div>
+    <h1>C 语言嵌入式要点</h1>
+
+    <p>嵌入式开发几乎离不开 C 语言。除了语法基础，还需要掌握与硬件紧密相关的写法。</p>
+
+    <h2>位操作</h2>
+    <p>寄存器配置常通过置位、清位完成：</p>
+    <pre><code>// 将第 5 位置 1
+REG |= (1 &lt;&lt; 5);
+
+// 将第 3 位清 0
+REG &amp;= ~(1 &lt;&lt; 3);
+
+// 读取第 2 位
+if (REG &amp; (1 &lt;&lt; 2)) { /* ... */ }</code></pre>
+
+    <h2>volatile 关键字</h2>
+    <p>寄存器、中断共享变量可能被硬件或中断意外修改，编译器不应优化掉对它的访问：</p>
+    <pre><code>volatile uint32_t *const GPIO_ODR = (uint32_t *)0x4001080C;</code></pre>
+
+    <h2>指针与内存映射</h2>
+    <p>外设寄存器在芯片手册中有固定地址，通过指针直接访问：</p>
+    <pre><code>#define PERIPH_BASE  0x40000000UL
+#define GPIOA_BASE   (PERIPH_BASE + 0x10800UL)
+#define GPIOA_CRL    (*(volatile uint32_t *)(GPIOA_BASE + 0x00))</code></pre>
+
+    <h2>固定宽度整数类型</h2>
+    <p>使用 <code>stdint.h</code> 中的 <code>uint8_t</code>、<code>uint16_t</code>、<code>uint32_t</code>，避免 <code>int</code> 在不同平台上长度不一致。</p>
+
+    <h2>栈与堆</h2>
+    <ul>
+      <li>MCU  RAM 很小，避免大数组、递归、频繁 <code>malloc</code>。</li>
+      <li>中断服务函数（ISR）应尽量短，不要在 ISR 里调用可能阻塞的 API。</li>
+    </ul>
+
+    <div class="note">
+      <strong>建议：</strong>阅读芯片 Reference Manual 中的寄存器章节，对照代码理解每一位的含义。
+    </div>
+
+    <nav class="article-nav">
+      <a class="prev" href="02-dev-environment.html">← 上一篇：开发环境搭建</a>
+      <a class="next" href="04-first-led.html">下一篇：第一个程序：点亮 LED →</a>
+    </nav>
+  </article>
+
+  <footer class="site-footer">嵌入式从入门到精通</footer>
+</body>
+</html>
